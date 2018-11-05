@@ -5,6 +5,8 @@
 #include <QFileDialog>
 #include "controller.h"
 #include "util.h"
+#include <vector>
+#include "graph.h"
 
 namespace Ui {
 class MainWindow;
@@ -13,6 +15,7 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    Graph g;
 
 public:
     explicit MainWindow(QWidget *parent = 0);

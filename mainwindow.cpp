@@ -34,9 +34,31 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_submit_btn_clicked()
 {
-    // testing if values are passed and casted to basic c++ data types properly
-    this->control.setFileName(qs2s(ui->file_input->text()));
-    this->control.testCasting(qs2d(ui->s_input->text()), qs2i(ui->quantum_input->text()));
+    std::vector<double> keys;
+    std::vector<double> values;
+
+    for (int i = 1; i < 6; i++) {
+        keys.push_back(i);
+        values.push_back(2*i);
+    }
+
+    g.setKeys(keys);
+    g.setValues(values);
+
+    g.appendKey(3.5);
+    g.appendValue(7);
+
+    g.setXLabel("time");
+    g.setYLabel("PID");
+
+    g.setXRange(-3, 10);
+    g.setYRange(0, 20);
+
+    g.setName("test graph");
+
+    g.plot();
+
+    g.show();
 }
 
 void MainWindow::on_algorithms_combo_currentIndexChanged(int index)
