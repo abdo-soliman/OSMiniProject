@@ -46,7 +46,7 @@ class HPFSchedulerCompare {
         }
         else {
             if (p2.arrival_time > current_time)
-                return (p2.arrival_time < p1.arrival_time);
+                return (p2.arrival_time < p1.arrival_time); // bug
             else
                 return true;
         }
@@ -71,11 +71,13 @@ class SRTNSchedulerCompare {
     public:
     static double current_time;
     bool operator() (Process& p1, Process& p2) {
-        if (p1.arrival_time <= current_time) { // if p2 is in the future, return false.
-            if (p2.arrival_time > current_time)
+        if (p1.arrival_time <= current_time) { 
+            if (p2.arrival_time > current_time) // if p2 is in the future, return false.
                 return false;
             if (p1.burst_time > p2.burst_time) // p2 is shorter so it comes first
                 return true;
+            else if (p1.burst_time < p2.burst_time)
+                return false;
             else if (p1.priority < p2.priority)
                 return true;
             else if (p1.priority == p2.priority)
@@ -85,7 +87,7 @@ class SRTNSchedulerCompare {
         }
         else {
             if (p2.arrival_time > current_time)
-                return (p2.arrival_time < p1.arrival_time);
+                return (p2.arrival_time < p1.arrival_time); // bug
             else
                 return true;
         }
