@@ -17,13 +17,16 @@ SOURCES += main.cpp\
     controller.cpp \
     util.cpp \
     graph.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    scheduler/Scheduler.cpp
 
 HEADERS  += mainwindow.h \
     controller.h \
     util.h \
     graph.h \
-    qcustomplot.h
+    qcustomplot.h \
+    scheduler/Scheduler.h \
+    scheduler/ProcessGenerator.h
 
 FORMS    += mainwindow.ui \
     graph.ui

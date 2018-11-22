@@ -1,12 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <string>
+#include <iostream>
 #include <QMainWindow>
 #include <QFileDialog>
-#include "controller.h"
+#include <QMessageBox>
+
 #include "util.h"
-#include <vector>
-#include "graph.h"
+#include "controller.h"
+
+using std::string;
+using std::cout;
 
 namespace Ui {
 class MainWindow;
@@ -15,7 +20,6 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    Graph g;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -29,7 +33,7 @@ private slots:
     void on_browse_btn_clicked();
 
 private:
-    controller control;
+    Controller controller;
     Ui::MainWindow *ui;
 };
 

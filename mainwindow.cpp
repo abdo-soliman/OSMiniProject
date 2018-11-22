@@ -20,11 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                    });
 
     // intializing validators to restrict input to numerical values only
-    ui->s_input->setValidator(new QDoubleValidator(this));
-    ui->quantum_input->setValidator(new QDoubleValidator(this));
-
-    // intialzing controller
-    this->control = controller();
+    ui->quantum_input->setValidator(new QIntValidator(this));
 }
 
 MainWindow::~MainWindow()
@@ -34,31 +30,55 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_submit_btn_clicked()
 {
-    std::vector<double> keys;
-    std::vector<double> values;
+    double s = -1;
+    double step = -1;
+    int quantum = -1;
+    string filename = qs2s(ui->file_input->text());
 
-    for (int i = 1; i < 6; i++) {
-        keys.push_back(i);
-        values.push_back(2*i);
+    if (filename == "") {
+        QMessageBox msgBox;
+        msgBox.setText("Error: invalid filename can't be empty!!!");
+        msgBox.exec();
+        return;
     }
 
-    g.setKeys(keys);
-    g.setValues(values);
+    if (isDouble(ui->s_input->text()))
+        s = qs2d(ui->s_input->text());
+    else {
+        QMessageBox msgBox;
+        msgBox.setText("Error: context switching time must a positive double value!!!");
+        msgBox.exec();
+        return;
+    }
 
-    g.appendKey(3.5);
-    g.appendValue(7);
+    if (isDouble(ui->step_time_input->text()))
+        step = qs2d(ui->step_time_input->text());
+    else {
+        QMessageBox msgBox;
+        msgBox.setText("Error: step time must a positive double value!!!");
+        msgBox.exec();
+        return;
+    }
 
-    g.setXLabel("time");
-    g.setYLabel("PID");
+    if (ui->algorithms_combo->currentIndex() == 2 && ui->quantum_input->text() == "") {
+        QMessageBox msgBox;
+        msgBox.setText("Error: quantum must a positive integer value!!!");
+        msgBox.exec();
+        return;
+    }
+    else if (ui->algorithms_combo->currentIndex() == 2)
+        quantum = qs2i(ui->quantum_input->text());
 
-    g.setXRange(-3, 10);
-    g.setYRange(0, 20);
+    if (!controller.setParameters(ui->algorithms_combo->currentIndex(), filename, step, s, quantum)) {
+        QMessageBox msgBox;
+        msgBox.setText("Error: invalid data please make sure that all data meet the required constrains!!!");
+        msgBox.exec();
+        return;
+    }
 
-    g.setName("test graph");
+    // run Scheduler
+    controller.run();
 
-    g.plot();
-
-    g.show();
 }
 
 void MainWindow::on_algorithms_combo_currentIndexChanged(int index)

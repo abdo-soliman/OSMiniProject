@@ -15,4 +15,7 @@ int qs2i(QString qs);
 // function that converts QString to double
 double qs2d(QString qs);
 
+// function that checks if a string value is double or not
+bool isDouble(QString qs);
+
 #endif // UTIL_H

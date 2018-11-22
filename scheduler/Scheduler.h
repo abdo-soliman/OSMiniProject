@@ -67,6 +67,49 @@ private:
     priority_queue<Process, std::vector<Process>, HPFSchedulerCompare> queue;
 };
 
+class RRSchedulerCompare {
+    public:
+    static double current_time;
+    bool operator() (Process& p1, Process& p2) {
+        if (p1.arrival_time <= current_time) {
+            if (p2.arrival_time > current_time)  // if p2 is in the future, return false.
+                return false;
+            else if (p2.arrival_time < p1.arrival_time)
+                return true;
+            else if (p2.arrival_time > p1.arrival_time)
+                return false;
+            else if (p1.priority < p2.priority) // p2 has a higher priority so it comes first.
+                return true;
+            else if (p1.priority == p2.priority)
+                return p1.id > p2.id;
+            else
+                return false;
+        }
+        else {
+            if (p2.arrival_time > current_time)
+                return (p2.arrival_time < p1.arrival_time);
+            else
+                return true;
+        }
+    }
+};
+
+class RRScheduler : public Scheduler {
+public:
+    RRScheduler(double step_time, double context_time, int quantum);
+    virtual void AddProcess(Process& process);
+    virtual void AddProcess(int id, double arrival_time, double burst_time, int priority);
+    virtual void Step();
+    virtual int GetCurrentlyRunningProcess();
+    virtual bool IsDone();
+private:
+    void SetTopIsRunning(bool is_running);
+    void AddToBurstTime(double value);
+    int quantum;
+    int current_quantum;
+    priority_queue<Process, std::vector<Process>, RRSchedulerCompare> queue;
+};
+
 class SRTNSchedulerCompare {
     public:
     static double current_time;

@@ -46,7 +46,7 @@ void Graph::plot() {
                 if (key_data[i] < min)
                     min = key_data[i];
             }
-            setXRange(min, max);
+            setXRange(min-1, max+1);
         }
     }
 
