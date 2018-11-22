@@ -2,8 +2,11 @@
 #define CONTROLLER_H
 
 #include <string>
+#include <vector>
 #include <fstream>
-using namespace std;
+#include "graph.h"
+#include "scheduler/Scheduler.h"
+using std::vector;
 
 enum algorithm {
     HPF,
@@ -12,16 +15,16 @@ enum algorithm {
     SRTN
 };
 
-class controller {
+class Controller {
 public:
-    controller();
-    bool setAlgorithm(algorithm algo);
-    void setFileName(string name);
-    void testCasting(int num1=0, int num2=0);
+    bool setParameters(int algo, string filename, double step_time, double s, int quantum = 0);
+    void run();
+    void plot();
 
 private:
-    algorithm algo;
+    Scheduler* scheduler;
     string filename;
+    Graph g;
 };
 
 #endif // CONTROLLER_H

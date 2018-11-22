@@ -3,6 +3,7 @@
 using std::cout;
 
 double HPFSchedulerCompare::current_time = 0.0;
+double RRSchedulerCompare::current_time = 0.0;
 double SRTNSchedulerCompare::current_time = 0.0;
 
 HPFScheduler::HPFScheduler(double step_time, double context_time) : Scheduler(step_time, context_time) {
@@ -67,6 +68,89 @@ int HPFScheduler::GetCurrentlyRunningProcess() {
 }
 
 bool HPFScheduler::IsDone() {
+    return queue.empty();
+}
+
+RRScheduler::RRScheduler(double step_time, double context_time, int quantum) : Scheduler(step_time, context_time) {
+    this->quantum = quantum;
+    this->current_quantum = quantum;
+}
+
+void RRScheduler::AddProcess(Process& process) {
+    queue.push(process);
+}
+
+void RRScheduler::AddProcess(int id, double arrival_time, double burst_time, int priority) {
+    Process process;
+    process.id = id; // Add check here.
+    process.arrival_time = arrival_time;
+    process.burst_time = burst_time;
+    process.priority = priority;
+    AddProcess(process);
+}
+
+void RRScheduler::SetTopIsRunning(bool is_running) {
+    if (queue.empty())
+        return;
+    Process process = queue.top();
+    queue.pop();
+    process.is_running = is_running && (process.arrival_time <= current_time);
+    queue.push(process);
+}
+
+void RRScheduler::AddToBurstTime(double value) {
+    if (queue.empty())
+        return;
+    Process process = queue.top();
+    queue.pop();
+    process.burst_time += value;
+    queue.push(process);
+}
+
+void RRScheduler::Step() {
+    if (current_context_time > 0)
+        current_context_time -= step_time;
+    if (!queue.empty()) {
+        Process current = queue.top();
+        if (current.is_running) {
+            // If our current process is done, remove it from the queue and set the switching time.
+            if (current.burst_time - step_time <= 0) {
+                queue.pop();
+                current_context_time = context_time;
+                current_quantum = quantum;
+            }
+            else {
+               AddToBurstTime(-1.0 * step_time);
+               --current_quantum;
+            }
+        }
+
+        if (current_quantum <= 0) {
+            current = queue.top();
+            current.arrival_time = current_time;
+            current.is_running = false;
+
+            queue.pop();
+            queue.push(current);
+
+            current_quantum = quantum;
+            current_context_time = context_time;
+        }
+
+        if (current_context_time <= 0) {
+            SetTopIsRunning(true);
+        }
+    }
+
+    current_time += step_time;
+    RRScheduler::current_time = current_time;
+}
+
+int RRScheduler::GetCurrentlyRunningProcess() {
+    return ((queue.empty() || !queue.top().is_running) ? 0 : queue.top().id);
+}
+
+bool RRScheduler::IsDone() {
     return queue.empty();
 }
 
