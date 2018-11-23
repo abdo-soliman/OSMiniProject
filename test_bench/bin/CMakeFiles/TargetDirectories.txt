@@ -1,0 +1,7 @@
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/install/strip.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/edit_cache.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/main.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/rebuild_cache.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/list_install_components.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/install/local.dir
+/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/test_bench/bin/CMakeFiles/install.dir

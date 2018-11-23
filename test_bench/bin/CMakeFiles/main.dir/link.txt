@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/mnt/01D35D8F61D34AA0/Projects/OS/OSMiniProject/scheduler/Scheduler.cpp.o  -o main 
