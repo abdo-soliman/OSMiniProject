@@ -77,7 +77,11 @@ void MainWindow::on_submit_btn_clicked()
     }
 
     // run Scheduler
-    controller.run();
+    if(!controller.run()) {
+        QMessageBox msgBox;
+        msgBox.setText("Error: invalid processes file!!!");
+        msgBox.exec();
+    }
 
 }
 

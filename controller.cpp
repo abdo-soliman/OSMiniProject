@@ -17,39 +17,60 @@ bool Controller::setParameters(int algo, string filename, double step_time, doub
     return true;
 }
 
-void Controller::run() {
-    // TODO read file and add processes
-
-    while (!scheduler->IsDone())
-        scheduler->Step();
-
-    // TODO plot statistics
-}
-
-void Controller::plot() {
-    // plot some random data for testing need to be replaced with real statistics
+bool Controller::run() {
+    int num_processes;
+    int id;
+    double arrival_time;
+    double burst_time;
+    double priority;
 
     vector<double> keys;
     vector<double> values;
 
-    for (int i = 1; i < 6; i++) {
-        keys.push_back(i);
-        values.push_back(2*i);
+    ifstream input(filename.c_str());
+
+    if (input.is_open()) {
+        input >> num_processes;
+
+        for (int i = 0; i < num_processes; i++) {
+            input >> id >> arrival_time >> burst_time >> priority;
+            scheduler->AddProcess(id, arrival_time, burst_time, priority);
+        }
+
     }
+    else
+        return false;
+
+
+    while (!scheduler->IsDone()) {
+        keys.push_back(scheduler->GetCurrentTime());
+        values.push_back(scheduler->GetCurrentlyRunningProcess());
+        scheduler->Step();
+    }
+
+    keys.push_back(scheduler->GetCurrentTime());
+    values.push_back(0);
+    plot(keys, values);
+
+    ofstream output("statistics.txt");
+    if (output.is_open())
+        scheduler->PrintStatistics(output);
+
+    return true;
+}
+
+void Controller::plot(vector<double> keys, vector<double> values) {
 
     g.setKeys(keys);
     g.setValues(values);
 
-    g.appendKey(3.5);
-    g.appendValue(7);
-
     g.setXLabel("time");
     g.setYLabel("PID");
 
-    g.setXRange(-3, 10);
-    g.setYRange(0, 20);
+//    g.setXRange(x_range.first, x_range.second);
+//    g.setYRange(y_range.first, y_range.second);
 
-    g.setName("test graph");
+    g.setName("Scheduling Processes");
 
     g.plot();
 

@@ -47,17 +47,17 @@ public:
             process_statistics[p.id].wait_time += (current_time - p.arrival_time); 
         process_statistics[p.id].burst_time += step_time;
     }
-    void PrintStatistics()
+    void PrintStatistics(ostream& output)
     {
         if (process_statistics.empty())
             return; // nothing to print.
-        cout << "pid\twait\tburst\tTA\tweiTA\n";
+        output << "pid\twait\tburst\tTA\tweiTA\n";
         int numProcesses = 0;
         double averageTA = 0.0;
         double averageWTA = 0.0;
         for (auto& it : process_statistics) {
             ProcessStatistics& ps = it.second;
-            cout << it.first << "\t" << ps.wait_time << "\t" << ps.burst_time << "\t" << ps.GetTurnAroundTime() << "\t" << ps.GetWeightedTATime() << "\n";
+            output << it.first << "\t" << ps.wait_time << "\t" << ps.burst_time << "\t" << ps.GetTurnAroundTime() << "\t" << ps.GetWeightedTATime() << "\n";
             numProcesses += 1;
             averageTA += ps.GetTurnAroundTime();
             averageWTA += ps.GetWeightedTATime();

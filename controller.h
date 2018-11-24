@@ -18,8 +18,8 @@ enum algorithm {
 class Controller {
 public:
     bool setParameters(int algo, string filename, double step_time, double s, int quantum = 0);
-    void run();
-    void plot();
+    bool run();
+    void plot(vector<double> keys, vector<double> values);
 
 private:
     Scheduler* scheduler;

@@ -25,8 +25,7 @@ HEADERS  += mainwindow.h \
     util.h \
     graph.h \
     qcustomplot.h \
-    scheduler/Scheduler.h \
-    scheduler/ProcessGenerator.h
+    scheduler/Scheduler.h
 
 FORMS    += mainwindow.ui \
     graph.ui
