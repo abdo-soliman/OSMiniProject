@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Visualization</string>
   </property>
   <widget class="QCustomPlot" name="customPlot" native="true">
    <property name="geometry">

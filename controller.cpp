@@ -32,24 +32,41 @@ bool Controller::run() {
     vector<double> values;
 
     ifstream input(filename.c_str());
+    vector<Process> processes;
 
     if (input.is_open()) {
         input >> num_processes;
 
         for (int i = 0; i < num_processes; i++) {
             input >> id >> arrival_time >> burst_time >> priority;
-            scheduler->AddProcess(id, arrival_time, burst_time, priority);
+            Process p;
+            p.id = id;
+            p.arrival_time = arrival_time;
+            p.burst_time = burst_time;
+            p.priority = priority;
+            processes.push_back(p);
+            // scheduler->AddProcess(id, arrival_time, burst_time, priority);
         }
 
     }
     else
         return false;
 
+    keys.push_back(0);
+    values.push_back(0);
 
-    while (!scheduler->IsDone()) {
+    while (!processes.empty() || !scheduler->IsDone()) {
+        for (int i = 0; i < processes.size(); i++) {
+            if (processes[i].arrival_time <= scheduler->GetCurrentTime()) {
+                scheduler->AddProcess(processes[i]);
+                processes.erase(processes.begin() + i);
+                i = i - 1;
+            }
+        }
+        scheduler->Step();
+        cout << scheduler->GetCurrentTime();
         keys.push_back(scheduler->GetCurrentTime());
         values.push_back(scheduler->GetCurrentlyRunningProcess());
-        scheduler->Step();
     }
 
     keys.push_back(scheduler->GetCurrentTime());
