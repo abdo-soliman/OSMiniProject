@@ -125,7 +125,7 @@ void RRScheduler::Step() {
                 current_quantum = quantum * step_time;
             }
             else if (current_quantum <= 0) {
-                current.arrival_time = current_time - step_time;
+                current.arrival_time = current_time - step_time + 1;
                 current.is_running = false;
                 current.burst_time -= step_time;
                 queue.pop();

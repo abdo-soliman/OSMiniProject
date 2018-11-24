@@ -51,19 +51,22 @@ public:
     {
         if (process_statistics.empty())
             return; // nothing to print.
-        output << "pid\twait\tburst\tTA\tweiTA\n";
+        output << "pid,wait,burst,TA,weiTA\n";
         int numProcesses = 0;
         double averageTA = 0.0;
         double averageWTA = 0.0;
         for (auto& it : process_statistics) {
             ProcessStatistics& ps = it.second;
-            output << it.first << "\t" << ps.wait_time << "\t" << ps.burst_time << "\t" << ps.GetTurnAroundTime() << "\t" << ps.GetWeightedTATime() << "\n";
+            output << it.first << "," << ps.wait_time << "," << ps.burst_time << "," << ps.GetTurnAroundTime() << "," << ps.GetWeightedTATime() << "\n";
             numProcesses += 1;
             averageTA += ps.GetTurnAroundTime();
             averageWTA += ps.GetWeightedTATime();
         }
         averageTA /= numProcesses;
         averageWTA /= numProcesses;
+
+        output << "averageTA," << averageTA << "\n";
+        output << "averageWTA," << averageWTA << "\n";
     }
 };
 
